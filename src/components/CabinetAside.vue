@@ -2,13 +2,19 @@
 import ProjectListItem from "./ProjectListItem.vue";
 import {useProjectsStore} from "../stores/projectsStore.js";
 import {onMounted} from "vue";
-import VueSpinner from "./VueSpinner.vue";
+import VueSpinner from "./structure/VueSpinner.vue";
+import router from "../router/index.js";
 
 const projectsStore = useProjectsStore()
 
 onMounted(() => {
   projectsStore.getProjects()
 })
+
+const chooseProject = (projectUrl) => {
+  projectsStore.currentProject = projectUrl
+  router.push('/cabinet/project/' + projectUrl)
+}
 
 </script>
 
@@ -25,7 +31,7 @@ onMounted(() => {
         v-for="project in projectsStore.projects"
         :project-name="project.name"
         :project-url="project.url"
-        @click="projectsStore.getProject(project.url)"
+        @click="chooseProject(project.url)"
       />
     </ul>
   </div>

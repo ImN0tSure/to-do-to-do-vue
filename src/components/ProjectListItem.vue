@@ -1,5 +1,8 @@
 <script setup>
-import {defineProps} from 'vue'
+import { defineProps } from 'vue'
+import { useProjectsStore } from "../stores/projectsStore.js"
+
+const projectsStore = useProjectsStore()
 
 const props = defineProps({
   projectUrl: {
@@ -11,6 +14,7 @@ const props = defineProps({
     default: ''
   }
 })
+
 </script>
 
 <template>

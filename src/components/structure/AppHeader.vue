@@ -1,8 +1,8 @@
 <script setup>
 
-import HeaderLogo from "./HeaderLogo.vue";
-import HeaderClock from "./HeaderClock.vue";
-import HeaderNav from "./HeaderNav.vue";
+import HeaderLogo from "../HeaderLogo.vue";
+import HeaderClock from "../HeaderClock.vue";
+import HeaderNav from "../HeaderNav.vue";
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 import TaskList from "./TaskList.vue"
 import axios from "../api/axios.js"
 import {ref, onMounted} from 'vue'
-import VueSpinner from "./VueSpinner.vue";
+import VueSpinner from "./structure/VueSpinner.vue";
 
 const tasks = ref({})
 const requestStatus = ref('idle') // idle, loading, success, error

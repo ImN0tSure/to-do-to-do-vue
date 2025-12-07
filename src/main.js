@@ -3,8 +3,8 @@ import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
 import router from './router'
-import VueSpinner from "./components/VueSpinner.vue"
-import BaseButton from "./components/BaseButton.vue"
+import VueSpinner from "./components/structure/VueSpinner.vue"
+import BaseButton from "./components/structure/BaseButton.vue"
 import { markRaw } from 'vue'
 import {useAuthStore} from "./stores/authStore.js";
 

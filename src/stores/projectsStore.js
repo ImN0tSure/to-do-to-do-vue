@@ -26,8 +26,17 @@ export const useProjectsStore = defineStore ('projectsStore', {
                 console.log(e.response?.data?.message)
             }
         },
-        async getProject(url) {
-            console.log('/api/project/' + url)
+        async getProject() {
+
+        },
+    },
+    getters: {
+        currentProjectKey() {
+            if(this.currentProject.length > 0) {
+                {
+                    return this.projects.findIndex(item => item.url === this.currentProject)
+                }
+            }
         }
     }
 })

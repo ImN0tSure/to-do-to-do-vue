@@ -3,9 +3,9 @@
 </script>
 
 <template>
-  <div>
-    This is test page and it works
-  </div>
+  <p>
+    This is TASKS tab
+  </p>
 </template>
 
 <style scoped>
