@@ -1,27 +1,15 @@
 <script setup>
-import {useProjectsStore} from "../stores/projectsStore.js";
-import {useRoute} from 'vue-router'
-import {onMounted, ref} from "vue";
+import {useProjectStore} from "../stores/projectStore.js";
+import {ref} from "vue";
 import BaseButton from "../components/structure/BaseButton.vue";
 import MainTab from "../components/ProjectPage/MainTab.vue";
 import TasksTab from "../components/ProjectPage/TasksTab.vue";
 
-const route = useRoute()
-const projectsStore = useProjectsStore()
+const projectStore = useProjectStore()
 const currentTab = ref('tasks')
 
 const switchTab = (tab) => {
   currentTab.value = tab
-}
-
-onMounted(() => {
-  checkCurrentProject()
-})
-
-const checkCurrentProject = () => {
-  if (!projectsStore.currentProject) {
-    projectsStore.currentProject = route.params.url
-  }
 }
 </script>
 
@@ -53,11 +41,11 @@ const checkCurrentProject = () => {
     </div>
     <MainTab
         v-if="currentTab === 'main'"
-        :key="projectsStore.currentProject"
+        :key="projectStore.currentProject"
     />
     <TasksTab
         v-if="currentTab === 'tasks'"
-        :key="projectsStore.currentProject"
+        :key="projectStore.currentProject"
     />
   </section>
 </template>

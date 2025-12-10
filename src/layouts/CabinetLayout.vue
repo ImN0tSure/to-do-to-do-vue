@@ -1,7 +1,5 @@
 <script setup>
-
 import CabinetAside from "../components/CabinetAside.vue";
-
 </script>
 
 <template>

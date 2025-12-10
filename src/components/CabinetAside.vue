@@ -1,18 +1,20 @@
 <script setup>
 import ProjectListItem from "./ProjectListItem.vue";
-import {useProjectsStore} from "../stores/projectsStore.js";
+import {useProjectStore} from "../stores/projectStore.js";
 import {onMounted} from "vue";
 import VueSpinner from "./structure/VueSpinner.vue";
 import router from "../router/index.js";
 
-const projectsStore = useProjectsStore()
+
+const projectStore = useProjectStore()
+
 
 onMounted(() => {
-  projectsStore.getProjects()
+  projectStore.getProjects()
 })
 
 const chooseProject = (projectUrl) => {
-  projectsStore.currentProject = projectUrl
+  projectStore.currentProject = projectUrl
   router.push('/cabinet/project/' + projectUrl)
 }
 
@@ -21,17 +23,18 @@ const chooseProject = (projectUrl) => {
 <template>
 <aside class="sidebar">
   <h2>Проекты</h2>
-  <div v-if="projectsStore.status === 'loading'" style="text-align: center">
+  <div v-if="projectStore.status === 'loading'" style="text-align: center">
     <VueSpinner/>
   </div>
 
-  <div class="project-list" v-else-if="projectsStore.status === 'success'">
+  <div class="project-list" v-else-if="projectStore.status === 'success'">
     <ul>
       <ProjectListItem
-        v-for="project in projectsStore.projects"
+        v-for="project in projectStore.projects"
         :project-name="project.name"
         :project-url="project.url"
         @click="chooseProject(project.url)"
+        :class="{active: $route.params.url === project.url}"
       />
     </ul>
   </div>

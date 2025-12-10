@@ -8,6 +8,7 @@ import UserInfoPage from "../pages/UserInfoPage.vue";
 import ProjectPage from "../pages/ProjectPage.vue";
 import CabinetLayout from "../layouts/CabinetLayout.vue";
 import UserCabinetPage from "../pages/UserCabinetPage.vue";
+import {useProjectStore} from "../stores/projectStore.js";
 
 
 const routes = [
@@ -33,7 +34,14 @@ const routes = [
             {
                 path: 'project/:url',
                 name: 'project',
-                component: ProjectPage
+                component: ProjectPage,
+                beforeEnter: (to) => {
+                    const projectStore = useProjectStore()
+
+                    if (!projectStore.currentProject || projectStore.currentProject !== to.params.url) {
+                        projectStore.currentProject = to.params.url
+                    }
+                }
             }
         ]
     },
