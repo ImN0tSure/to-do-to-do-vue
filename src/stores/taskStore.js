@@ -6,7 +6,17 @@ export const useTaskStore = defineStore('taskStore', {
     state() {
         return {
             tasks: [],
-            status: 'idle' // idle, loading, success, error
+            status: 'idle', // idle, loading, success, error
+            currentTask: [],
+            priorities: {
+                1: 'Высокий',
+                2: 'Средний',
+                3: 'Низкий'
+            },
+            inProgress: {
+                0: 'Завершено',
+                1: 'В процессе'
+            }
         }
     },
     actions: {
@@ -29,6 +39,41 @@ export const useTaskStore = defineStore('taskStore', {
                 if (response.data.success) {
                     this.tasks = response.data.tasks
                     this.status = 'success'
+                    console.log(response.data)
+                }
+            } catch (e) {
+                this.status = 'error'
+                console.log(e.response?.data?.message)
+            }
+        },
+        async getTask(projectUrl, taskId) {
+            this.status = 'loading'
+            try {
+                const response = await axios.get(`/api/project/${projectUrl}/tasks/${taskId}`)
+
+                if(response.data.success) {
+                    this.currentTask = response.data.task
+                    this.status = 'success'
+                    console.log(response.data)
+                }
+            } catch (e) {
+                this.status = 'error'
+                console.log(e.response?.data?.message)
+            }
+        },
+        async saveCurrentTask() {
+            this.status = 'loading'
+
+            const projectUrl = this.currentProject
+            const taskId = this.currentTask?.id
+            const targetUrl = `/api/project/${projectUrl}/tasks/${taskId}`
+
+            try {
+                const response = await axios.put(targetUrl, this.currentTask)
+
+                if(response.data.success) {
+                    this.status = 'success'
+                    console.log(response.data)
                 }
             } catch (e) {
                 this.status = 'error'

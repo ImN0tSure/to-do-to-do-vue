@@ -14,54 +14,43 @@ const switchTab = (tab) => {
 </script>
 
 <template>
-  <section class="content">
-    <div class="content-header">
-      <div class="content-header__tabs">
-        <div
-            class="tab"
-            :class="{active: currentTab === 'main'}"
-            @click="switchTab('main')"
-        >Главная
-        </div>
-        <div
-            class="tab"
-            :class="{active: currentTab === 'tasks'}"
-            @click="switchTab('tasks')"
-        >Задачи
-        </div>
+
+  <div class="content-header">
+    <div class="content-header__tabs">
+      <div
+          class="tab"
+          :class="{active: currentTab === 'main'}"
+          @click="switchTab('main')"
+      >Главная
       </div>
-      <div class="content-header__buttons">
-        <BaseButton
-            text="Добавить список"
-        />
-        <BaseButton
-            text="Добавить задачу"
-        />
+      <div
+          class="tab"
+          :class="{active: currentTab === 'tasks'}"
+          @click="switchTab('tasks')"
+      >Задачи
       </div>
     </div>
-    <MainTab
-        v-if="currentTab === 'main'"
-        :key="projectStore.currentProject"
-    />
-    <TasksTab
-        v-if="currentTab === 'tasks'"
-        :key="projectStore.currentProject"
-    />
-  </section>
+    <div class="content-header__buttons">
+      <BaseButton
+          text="Добавить список"
+      />
+      <BaseButton
+          text="Добавить задачу"
+      />
+    </div>
+  </div>
+  <MainTab
+      v-if="currentTab === 'main'"
+      :key="projectStore.currentProject"
+  />
+  <TasksTab
+      v-if="currentTab === 'tasks'"
+      :key="projectStore.currentProject"
+  />
+
 </template>
 
 <style lang=scss scoped>
-.content {
-  flex-grow: 1;
-  background: #ffd0e0;
-  border-radius: 40px;
-  padding: 40px 50px;
-  box-shadow: 0 6px 20px rgba(240, 98, 146, 0.35);
-  display: flex;
-  flex-direction: column;
-  width: 82%;
-}
-
 .content-header {
   display: flex;
   justify-content: space-between;

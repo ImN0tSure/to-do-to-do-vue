@@ -1,7 +1,6 @@
 <script setup>
 import TaskList from "../components/TaskList.vue"
-import axios from "../api/axios.js"
-import {onMounted, ref} from 'vue'
+import {onMounted} from 'vue'
 import VueSpinner from "../components/structure/VueSpinner.vue";
 import {useTaskStore} from "../stores/taskStore.js";
 
@@ -14,18 +13,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="content">
-    <VueSpinner size="l" v-if="taskStore.status === 'loading'"/>
-    <div v-if="taskStore.status === 'success'">
-      <TaskList
-          v-if="taskStore.tasks.length > 0"
-          :tasks="taskStore.tasks"
-          :opened=true
-      />
-      <p v-else>Задач на сегодня нет</p>
-    </div>
-    <div v-if="taskStore.status === 'error'">Ошибка загрузки. Смотрите консоль.</div>
-  </section>
+
+  <VueSpinner size="l" v-if="taskStore.status === 'loading'"/>
+  <div v-if="taskStore.status === 'success'">
+    <TaskList
+        v-if="taskStore.tasks.length > 0"
+        :tasks="taskStore.tasks"
+        :opened=true
+    />
+    <p v-else>Задач на сегодня нет</p>
+  </div>
+  <div v-if="taskStore.status === 'error'">Ошибка загрузки. Смотрите консоль.</div>
+
 </template>
 
 <style scoped>

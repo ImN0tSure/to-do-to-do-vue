@@ -5,7 +5,9 @@ import CabinetAside from "../components/CabinetAside.vue";
 <template>
   <main class="cabinet">
     <CabinetAside/>
-    <RouterView />
+    <section class="content">
+      <RouterView />
+    </section>
   </main>
 </template>
 
@@ -19,5 +21,16 @@ import CabinetAside from "../components/CabinetAside.vue";
   border-radius: 40px 40px 0 0;
   box-shadow: 0 10px 30px rgba(240, 98, 146, 0.3);
   user-select: none;
+}
+
+.content {
+  flex-grow: 1;
+  background: #ffd0e0;
+  border-radius: 40px;
+  padding: 40px 50px;
+  box-shadow: 0 6px 20px rgba(240, 98, 146, 0.35);
+  display: flex;
+  flex-direction: column;
+  width: 82%;
 }
 </style>
