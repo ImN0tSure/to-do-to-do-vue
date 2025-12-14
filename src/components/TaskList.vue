@@ -1,7 +1,8 @@
 <script setup>
 import TaskListRow from "./TaskListRow.vue";
-import {ref, computed, defineProps} from 'vue'
+import {computed, defineProps, ref} from 'vue'
 import TaskListRowHeader from "./TaskListRowHeader.vue";
+import router from "../router/index.js";
 
 const props = defineProps({
   header: {
@@ -11,14 +12,27 @@ const props = defineProps({
   tasks: {
     type: Array,
     default: []
+  },
+  changeable: {
+    type: Boolean,
+    default: false
+  },
+  opened: {
+    type: Boolean,
+    default: false
   }
 })
 
-const listOpened = ref(true)
+const listOpened = ref(props.opened)
 
 const toggleListDisplay = () => {
   listOpened.value = !listOpened.value
 }
+
+const showTask = (projectUrl, taskId) => {
+  router.push('/cabinet/project/' + projectUrl + '/tasks/' + taskId)
+}
+
 const listArrow = computed(() => {
   return listOpened.value ? '▲' : '▼'
 })
@@ -26,24 +40,27 @@ const listArrow = computed(() => {
 </script>
 
 <template>
-<div class="task-list">
-  <div class="task-list__header" @click="toggleListDisplay()">
-    <h2>{{ header }}</h2>
-    <span class="toggle-arrow">{{ listArrow }}</span>
+  <div class="task-list">
+    <div class="task-list__header" @click="toggleListDisplay()">
+      <div class="edit-button" v-if="changeable === true">Редактировать</div>
+      <h2>{{ header }}</h2>
+      <span class="toggle-arrow">{{ listArrow }}</span>
+    </div>
+    <div class="tasks" v-show="listOpened">
+      <TaskListRowHeader/>
+      <TaskListRow
+          v-for="task in tasks"
+          :name="task.name"
+          :in-progress="!!task.inProgress"
+          :priority="task.priority"
+          :time="task.time"
+          :id="task.id"
+          :project-url="task.projectUrl"
+          @click="showTask(task.projectUrl, task.id)"
+      />
+    </div>
   </div>
-  <div class="tasks" v-show="listOpened">
-    <TaskListRowHeader/>
-    <TaskListRow
-      v-for="task in tasks"
-      :name="task.name"
-      :in-progress="!!task.inProgress"
-      :priority="task.priority"
-      :time="task.time"
-      :id="task.id"
-      :project-url="task.projectUrl"
-    />
-  </div>
-</div>
+
 </template>
 
 <style lang=scss>
@@ -65,7 +82,12 @@ const listArrow = computed(() => {
     color: #fff;
     transition: background 0.3s ease;
     margin-bottom: 20px;
+
+    &:hover .edit-button {
+      top: 35px;
+    }
   }
+
 }
 
 .tasks {
@@ -98,6 +120,29 @@ const listArrow = computed(() => {
   font-size: 1.2em;
   transition: transform 0.3s ease;
   cursor: pointer;
+}
+
+.edit-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(-100%);
+  background: #fff;
+  color: #9e1b56;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px 0;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Comic Neue', cursive, Arial, sans-serif;
+  box-shadow: 0 3px 6px rgba(216, 57, 121, 0.6);
+  transition: top 0.3s ease;
+  font-size: 14px;
+
+  &:hover {
+    background: #d83979;
+    color: #fff;
+  }
 }
 
 </style>

@@ -1,7 +1,8 @@
 import {defineStore} from 'pinia'
 import axios from "../api/axios.js"
+import {useRoute} from 'vue-router'
 
-export const useProjectsStore = defineStore ('projectsStore', {
+export const useProjectStore = defineStore ('projectStore', {
     state() {
         return {
             projects: null,
@@ -26,8 +27,17 @@ export const useProjectsStore = defineStore ('projectsStore', {
                 console.log(e.response?.data?.message)
             }
         },
-        async getProject(url) {
-            console.log('/api/project/' + url)
+        async getProject() {
+
+        },
+    },
+    getters: {
+        currentProjectKey() {
+            if(this.currentProject) {
+                {
+                    return this.projects.findIndex(item => item.url === this.currentProject)
+                }
+            }
         }
     }
 })

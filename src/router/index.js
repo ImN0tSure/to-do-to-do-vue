@@ -1,37 +1,64 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 import HelloPage from "../pages/HelloPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
-import UserCabinetPage from "../pages/UserCabinetPage.vue";
 import {useAuthStore} from "../stores/authStore.js";
 import RegistrationPage from "../pages/RegistrationPage.vue";
 import UserInfoPage from "../pages/UserInfoPage.vue";
+import ProjectPage from "../pages/ProjectPage.vue";
+import CabinetLayout from "../layouts/CabinetLayout.vue";
+import UserCabinetPage from "../pages/UserCabinetPage.vue";
+import {useProjectStore} from "../stores/projectStore.js";
+import TaskPage from "../pages/TaskPage.vue";
 
 
 const routes = [
     {
         path: '/',
-        name: 'HelloPage',
+        name: 'home',
         component: HelloPage
     },
     {
         path: '/login',
-        name: 'LoginPage',
+        name: 'login',
         component: LoginPage
     },
     {
         path: '/cabinet',
-        name: 'UserCabinetPage',
-        component: UserCabinetPage
+        component: CabinetLayout,
+        children: [
+            {
+                path: '',
+                name: 'cabinet',
+                component: UserCabinetPage
+            },
+            {
+                path: 'project/:url',
+                name: 'project',
+                component: ProjectPage,
+                beforeEnter: (to) => {
+                    const projectStore = useProjectStore()
+
+                    if (!projectStore.currentProject || projectStore.currentProject !== to.params.url) {
+                        projectStore.currentProject = to.params.url
+                    }
+                }
+            },
+            {
+                path: 'project/:url/tasks/:taskId',
+                name: 'project.task',
+                component: TaskPage
+            }
+        ]
     },
     {
         path: '/registration',
-        name: 'RegistrationPage',
+        name: 'registration',
         component: RegistrationPage
     },
     {
         path: '/user-info',
-        name: 'UserInfoPage',
+        name: 'userInfo',
         component: UserInfoPage
     }
 ]
@@ -43,27 +70,27 @@ const router = createRouter({
 
 function isToGuestPage(pageName) {
     const guestPages = [
-        'HelloPage',
-        'LoginPage',
-        'RegistrationPage',
-        'UserInfoPage'
+        'home',
+        'login',
+        'registration',
+        'userInfo'
     ]
 
     return guestPages.includes(pageName)
 }
 
 
-router.beforeEach( async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore()
 
-    if(!authStore.isAuthResolved) {
+    if (!authStore.isAuthResolved) {
         await authStore.restoreAuth()
     }
 
-    if(!authStore.isAuth() && !isToGuestPage(to.name)) {
-        next({ name: 'LoginPage' })
-    } else if(authStore.isAuth() && isToGuestPage(to.name)) {
-        next({ name: 'UserCabinetPage' })
+    if (!authStore.isAuth() && !isToGuestPage(to.name)) {
+        next({name: 'login'})
+    } else if (authStore.isAuth() && isToGuestPage(to.name)) {
+        next({name: 'cabinet'})
     } else {
         next()
     }

@@ -1,5 +1,5 @@
 <script setup>
-import BaseInput from "../components/BaseInput.vue";
+import BaseInput from "../components/structure/BaseInput.vue";
 import UserInfoRegistrationForm from "../components/UserInfoRegistrationForm.vue";
 
 </script>

@@ -73,7 +73,7 @@
   background: #fce7f0;
   cursor: pointer;
 }
-.name {
+.name, .time {
   color: #7a2350;
 }
 

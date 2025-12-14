@@ -1,5 +1,5 @@
 <script setup>
-import BaseInput from "./BaseInput.vue";
+import BaseInput from "./structure/BaseInput.vue";
 import {computed, ref} from "vue";
 import {useRegistrationStore} from "../stores/registrationStore.js";
 
