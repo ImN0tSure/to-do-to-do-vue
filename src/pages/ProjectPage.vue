@@ -4,12 +4,19 @@ import {ref} from "vue";
 import BaseButton from "../components/structure/BaseButton.vue";
 import MainTab from "../components/ProjectPage/MainTab.vue";
 import TasksTab from "../components/ProjectPage/TasksTab.vue";
+import {useRoute} from 'vue-router'
+import router from "../router/index.js";
 
 const projectStore = useProjectStore()
 const currentTab = ref('tasks')
-
+const route = useRoute()
 const switchTab = (tab) => {
   currentTab.value = tab
+}
+
+const toCreateTaskPage = () => {
+  const projectUrl = route.params.url
+  router.push(`/cabinet/project/${projectUrl}/tasks/create`)
 }
 </script>
 
@@ -36,6 +43,7 @@ const switchTab = (tab) => {
       />
       <BaseButton
           text="Добавить задачу"
+          @click="toCreateTaskPage"
       />
     </div>
   </div>

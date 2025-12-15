@@ -79,6 +79,25 @@ export const useTaskStore = defineStore('taskStore', {
                 this.status = 'error'
                 console.log(e.response?.data?.message)
             }
+        },
+        async storeTask(newTask) {
+            this.status='loading'
+
+            const projectUrl = this.currentProject
+            const targetUrl = `/api/project/${projectUrl}/tasks`
+
+            try {
+                const response = await axios.post(targetUrl, newTask)
+
+                if(response.data.success) {
+                    this.status = 'success'
+                    console.log(response?.data)
+                    this.router.push(`/cabinet/project/${projectUrl}`)
+                }
+            } catch (e) {
+                this.status = 'error'
+                console.log(e.response?.data?.message)
+            }
         }
     },
     getters: {

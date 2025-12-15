@@ -22,6 +22,14 @@ const props = defineProps({
   isDisabled: {
     type: Boolean,
     default: false
+  },
+  withLabel: {
+    type: Boolean,
+    default: false
+  },
+  label: {
+    type: String,
+    default: ''
   }
 })
 
@@ -36,6 +44,7 @@ const inputValueChange = (value, name) => {
 
 <template>
   <div class="input-wrap">
+    <label v-if="withLabel" :for="name">{{ label }}</label>
     <input
         class="base-input"
         :type="type"
@@ -63,5 +72,12 @@ const inputValueChange = (value, name) => {
 }
 .input-wrap {
   margin-bottom: 20px;
+}
+label {
+  font-size: 1.1em;
+  color: #7a2350;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
 }
 </style>

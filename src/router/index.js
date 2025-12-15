@@ -10,6 +10,7 @@ import CabinetLayout from "../layouts/CabinetLayout.vue";
 import UserCabinetPage from "../pages/UserCabinetPage.vue";
 import {useProjectStore} from "../stores/projectStore.js";
 import TaskPage from "../pages/TaskPage.vue";
+import CreateTaskPage from "../pages/CreateTaskPage.vue";
 
 
 const routes = [
@@ -48,6 +49,11 @@ const routes = [
                 path: 'project/:url/tasks/:taskId',
                 name: 'project.task',
                 component: TaskPage
+            },
+            {
+                path: 'project/:url/tasks/create',
+                name: 'project.task.create',
+                component: CreateTaskPage
             }
         ]
     },
