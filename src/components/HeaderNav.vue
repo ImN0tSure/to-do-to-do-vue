@@ -9,18 +9,14 @@ const checkAuthorization = computed(() => {
   return !!authStore.isLoggedIn
 })
 
-const isAuthResolved = computed(() => {
-  return authStore.isAuthResolved
-})
-
 const logout = () => {
   authStore.logout()
 }
 </script>
 
 <template>
-
-  <nav v-if="isAuthResolved">
+  <VueSpinner v-if="authStore.status === 'loading'"/>
+  <nav v-else>
     <div v-if="checkAuthorization">
       <RouterLink class="nav-item" to="/cabinet">Главная</RouterLink>
       <RouterLink class="nav-item" to="/notifications">Уведомления</RouterLink>
@@ -33,7 +29,7 @@ const logout = () => {
       <RouterLink class="nav-item" to="/registration">Зарегистрироваться</RouterLink>
     </div>
   </nav>
-  <VueSpinner v-else/>
+
 </template>
 
 <style scoped>

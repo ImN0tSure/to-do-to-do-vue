@@ -10,11 +10,10 @@ const authStore = useAuthStore()
 <template>
   <AppHeader/>
 
-  <RouterView v-if="authStore.isAuthResolved"/>
-  <main class="main" v-else>
+  <main class="main" v-if="authStore.status === 'loading'">
     <VueSpinner size="l" color="#000"/>
   </main>
-
+  <RouterView v-else/>
 
   <AppFooter/>
 </template>

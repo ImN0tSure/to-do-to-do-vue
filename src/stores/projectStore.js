@@ -15,7 +15,7 @@ export const useProjectStore = defineStore ('projectStore', {
             this.status = 'loading';
 
             try {
-                const response = await axios.get('/api/projects')
+                const response = await axios.get('/api/project')
 
                 if(response.data.success) {
                     this.projects = response.data.projects
@@ -27,9 +27,26 @@ export const useProjectStore = defineStore ('projectStore', {
                 console.log(e.response?.data?.message)
             }
         },
-        async getProject() {
+        async storeProject(newProject) {
+            this.status = 'loading'
 
-        },
+            try {
+                const response = await axios.post('/api/project', newProject)
+
+                if(response.data.success) {
+                    await this.getProjects()
+                    this.status = 'success'
+                    console.log(response.data.message)
+                    this.router.push('/cabinet')
+                } else {
+                    this.status = 'error'
+                    console.log(response.data)
+                }
+            } catch (e) {
+                this.status = 'error'
+                console.log(e.response?.data?.message)
+            }
+        }
     },
     getters: {
         currentProjectKey() {

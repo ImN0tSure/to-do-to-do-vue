@@ -31,14 +31,17 @@ const inputValueChange = (value, name) => {
 </script>
 
 <template>
-  <label v-if="withLabel" :for="name">{{ label }}</label>
-  <textarea
-      :value="modelValue"
-      :id="name"
-      :name="name"
-      :placeholder="placeholder"
-      @input="inputValueChange($event.target.value, name)"
-  ></textarea>
+  <div class="input-wrap">
+    <label v-if="withLabel" :for="name">{{ label }}</label>
+    <textarea
+        :value="modelValue"
+        :id="name"
+        :name="name"
+        :placeholder="placeholder"
+        @input="inputValueChange($event.target.value, name)"
+    ></textarea>
+  </div>
+
 </template>
 
 <style scoped>
@@ -64,5 +67,9 @@ textarea {
   border-image: initial;
   background: rgb(255, 240, 246);
   transition: border-color 0.3s;
+}
+
+.input-wrap {
+  margin-bottom: 20px;
 }
 </style>

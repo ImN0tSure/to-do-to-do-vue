@@ -11,6 +11,7 @@ import UserCabinetPage from "../pages/UserCabinetPage.vue";
 import {useProjectStore} from "../stores/projectStore.js";
 import TaskPage from "../pages/TaskPage.vue";
 import CreateTaskPage from "../pages/CreateTaskPage.vue";
+import CreateProjectPage from "../pages/CreateProjectPage.vue";
 
 
 const routes = [
@@ -44,6 +45,11 @@ const routes = [
                         projectStore.currentProject = to.params.url
                     }
                 }
+            },
+            {
+                path: 'project/create',
+                name: 'project.create',
+                component: CreateProjectPage
             },
             {
                 path: 'project/:url/tasks/:taskId',
