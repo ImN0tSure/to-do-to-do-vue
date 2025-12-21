@@ -95,7 +95,7 @@ function isToGuestPage(pageName) {
 router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore()
 
-    if (!authStore.isAuthResolved) {
+    if (authStore.status !== 'success') {
         await authStore.restoreAuth()
     }
 

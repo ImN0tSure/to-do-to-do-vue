@@ -1,5 +1,9 @@
 <script setup>
 import CabinetAside from "../components/CabinetAside.vue";
+import RootModal from "../components/structure/modal/RootModal.vue";
+import {useModalStore} from "../stores/modalStore.js";
+
+const modalStore = useModalStore()
 </script>
 
 <template>
@@ -9,6 +13,10 @@ import CabinetAside from "../components/CabinetAside.vue";
       <RouterView />
     </section>
   </main>
+
+  <RootModal
+    v-if="modalStore.isOpen"
+  />
 </template>
 
 <style scoped>

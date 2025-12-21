@@ -55,6 +55,15 @@ const userStatus = computed(() => {
   align-items: center;
   margin-bottom: 15px;
   width: 260px;
+  justify-content: center;
+  color: rgb(122, 35, 80);
+
+  &:hover {
+    cursor: pointer;
+    border-radius: 40px;
+    background-color: rgba(240, 98, 146, 1);
+    color: #fff;
+  }
 
   &__photo {
     margin-right: 10px;
@@ -72,13 +81,15 @@ const userStatus = computed(() => {
       height: 100%;
       object-fit: cover;
     }
+    
+
   }
 
   &__info {
     position: relative;
 
     & div {
-      color: rgb(122, 35, 80);
+
       max-width: 200px;
     }
 

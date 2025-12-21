@@ -5,7 +5,9 @@ import {ref, onMounted, computed} from 'vue'
 import ParticipantPreview from "./ParticipantPreview.vue";
 import VueSpinner from "../structure/VueSpinner.vue";
 import BaseButton from "../structure/BaseButton.vue";
+import {useModalStore} from "../../stores/modalStore.js";
 
+const modalStore = useModalStore()
 const projectStore = useProjectStore()
 const participantStore = useParticipantStore()
 
@@ -16,6 +18,11 @@ onMounted(() => {
 const projectDescription = computed(() => {
   return projectStore.projects[projectStore.currentProjectKey].description
 })
+
+const showParticipantInfo = (id) => {
+  participantStore.getParticipant(id)
+  modalStore.open('participant', {userId: id})
+}
 
 </script>
 
@@ -30,18 +37,20 @@ const projectDescription = computed(() => {
   <div class="section">
     <h2>Участники</h2>
     <VueSpinner
-        v-if="participantStore.status === 'loading'"
+        v-if="participantStore.participantsLoading === 'loading'"
     />
-    <div class="participants"  v-if="participantStore.status === 'success'">
+    <div class="participants"  v-if="participantStore.participantsLoading === 'success'">
       <ParticipantPreview
         v-for="participant in participantStore.participants"
+        :key="participant.user_id"
         :name="participant.name"
         :surname="participant.surname"
         :img="participant.avatar_img"
         :status="participant.pivot.status"
+        @click="showParticipantInfo(participant.user_id)"
       />
     </div>
-    <p v-if="participantStore.status === 'error'">
+    <p v-if="participantStore.participantsLoading === 'error'">
       Ошибка загрузки. Смотри консоль.
     </p>
   </div>

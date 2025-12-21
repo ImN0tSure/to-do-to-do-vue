@@ -52,13 +52,16 @@ export const useAuthStore = defineStore('authStore', {
         },
 
         async restoreAuth() {
+            this.status = 'loading'
             try {
                 const { data } = await axios.get('api/user')
                 this.user = data
                 this.isLoggedIn = true
+                this.status = 'success'
             } catch {
                 this.user = null
                 this.isLoggedIn = false
+                this.status = 'error'
             }
         }
     }

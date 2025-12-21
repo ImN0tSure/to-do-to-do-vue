@@ -123,15 +123,15 @@ onMounted(async () => {
         :options="taskStore.priorities"
         v-model="newTask.priority"
     />
+    <VueSpinner v-if="taskStore.status === 'loading'"/>
+    <BaseButton
+        v-else
+        size="m"
+        text="Сохранить"
+        class="date-time"
+        @click="storeTask"
+    />
   </div>
-  <VueSpinner v-if="taskStore.status === 'loading'"/>
-  <BaseButton
-      v-else
-      size="m"
-      text="Сохранить"
-      class="date-time"
-      @click="storeTask"
-  />
 </template>
 
 <style lang=scss scoped>

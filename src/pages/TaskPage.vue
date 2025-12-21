@@ -112,16 +112,17 @@ onMounted(async () => {
         :options="inProgressOptions"
         :with-nullable=false
     />
+    <BaseButton
+        size="m"
+        text="Сохранить"
+        @click.prevent.stop="saveTask"
+        class="date-time"
+    />
   </div>
   <div v-else-if="taskStore.status === 'error'">
     Ошибка загрузки. Смотрите консоль.
   </div>
-  <BaseButton
-      size="m"
-      text="Сохранить"
-      @click.prevent.stop="saveTask"
-      class="date-time"
-  />
+
 </template>
 
 <style lang=scss scoped>
