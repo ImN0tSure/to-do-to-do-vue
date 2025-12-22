@@ -6,7 +6,12 @@ export const useTasklistStore = defineStore('tasklistStore', {
     state() {
         return {
             tasklists: [],
-            status: 'idle' // idle, loading, success, error
+            newTasklist: {
+                name: '',
+                description: ''
+            },
+            status: 'idle', // idle, loading, success, error
+            createTasklistStatus: 'idle' // idle, loading, success, error
         }
     },
     actions: {
@@ -20,6 +25,31 @@ export const useTasklistStore = defineStore('tasklistStore', {
             } catch (e) {
                 this.status = 'error'
                 console.log(e.response?.data?.message)
+            }
+        },
+        async createTasklist() {
+            if(this.newTasklist.name.length > 0) {
+                this.createTasklistStatus = 'loading'
+                try {
+                    const targetUrl = `/api/project/${this.currentProject}/tasklists`
+
+                    const response = await axios.post(targetUrl, this.newTasklist)
+
+                    if(response.data.success) {
+                        this.tasklists.push(response.data.tasklist)
+                        this.createTasklistStatus = 'success'
+                        console.log(response.data)
+                        return {success: true}
+                    } else {
+                        this.createTasklistStatus = 'error'
+                        console.log(response.data)
+                        return {success: false}
+                    }
+                } catch (e) {
+                    this.createTasklistStatus = 'error'
+                    console.log(e.response?.data?.message)
+                    return {success: false}
+                }
             }
         }
     },

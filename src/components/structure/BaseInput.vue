@@ -30,6 +30,10 @@ const props = defineProps({
   label: {
     type: String,
     default: ''
+  },
+  size: {
+    type: String,
+    default: 'l'
   }
 })
 
@@ -39,6 +43,9 @@ const inputValueChange = (value, name) => {
   emit('update:modelValue', value, name)
 }
 
+const rootClasses = computed(() => {
+  return [`size-${props.size}`]
+})
 
 </script>
 
@@ -47,6 +54,7 @@ const inputValueChange = (value, name) => {
     <label v-if="withLabel" :for="name">{{ label }}</label>
     <input
         class="base-input"
+        :class="rootClasses"
         :type="type"
         :name="name"
         :placeholder="placeholder"
@@ -59,11 +67,9 @@ const inputValueChange = (value, name) => {
 
 </template>
 
-<style scoped>
+<style lang=scss scoped>
 .base-input {
   width: 100%;
-  padding: 16px;
-  font-size: 1.1em;
   border: 2px solid #f06292;
   border-radius: 30px;
   color: #4b2c42;
@@ -80,4 +86,20 @@ label {
   margin-bottom: 10px;
   display: block;
 }
+
+.size {
+
+  &-l {
+    padding: 16px;
+    font-size: 1.1em;
+  }
+
+  &-s {
+    padding: 10px 12px;
+    font-size: 1em;
+  }
+
+}
+
+
 </style>

@@ -1,7 +1,7 @@
 <script setup>
-import {useAuthStore} from "../stores/authStore.js";
+import {useAuthStore} from "../../../stores/authStore.js";
 import {computed} from 'vue'
-import VueSpinner from "./structure/VueSpinner.vue";
+import VueSpinner from "../VueSpinner.vue";
 
 const authStore = useAuthStore()
 

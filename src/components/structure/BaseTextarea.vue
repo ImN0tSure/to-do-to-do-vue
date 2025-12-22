@@ -16,12 +16,11 @@ const props = defineProps({
   },
   modelValue: {
     type: String,
-    default: 'Здесь могла быть ваша реклама.'
+    default: ''
   },
   placeholder: {
     type: String,
-    default:
-        'Здесь могла быть ваша реклама.'
+    default: 'Здесь могла быть ваша реклама.'
   }
 })
 const emit =defineEmits(['update:modelValue'])
@@ -57,15 +56,12 @@ textarea {
   resize: vertical;
   height: 150px;
   width: 100%;
-  font-size: 1em;
+  font-size: 1rem;
   color: rgb(122, 35, 80);
   padding: 12px 18px;
   border-radius: 20px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(216, 57, 121);
+  border: 2px solid #f06292;
   border-image: initial;
-  background: rgb(255, 240, 246);
   transition: border-color 0.3s;
 }
 

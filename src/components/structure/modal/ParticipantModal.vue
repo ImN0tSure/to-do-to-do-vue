@@ -23,10 +23,10 @@ const close = () => {
 <template>
   <BaseModal @close="close">
     <VueSpinner
-        v-if="participantStore.status === 'loading'"
+        v-if="participantStore.participantLoading === 'loading'"
     />
     <section
-        v-else-if="participantStore.status === 'success'"
+        v-else-if="participantStore.participantLoading === 'success'"
         class="profile"
     >
       <div class="avatar-placeholder">
@@ -48,7 +48,7 @@ const close = () => {
         <p class="info">{{ participant.about }}</p>
       </div>
     </section>
-    <p v-else-if="participantStore.status === 'error'"> Ошибка загрузки. Смотри консоль.</p>
+    <p v-else-if="participantStore.participantLoading === 'error'"> Ошибка загрузки. Смотри консоль.</p>
 
   </BaseModal>
 </template>

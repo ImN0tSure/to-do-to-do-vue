@@ -1,6 +1,6 @@
 <script setup>
 
-import AppHeader from "./components/structure/AppHeader.vue";
+import AppHeader from "./components/structure/header/AppHeader.vue";
 import AppFooter from "./components/structure/AppFooter.vue";
 import {useAuthStore} from "./stores/authStore.js";
 

@@ -6,8 +6,10 @@ import MainTab from "../components/ProjectPage/MainTab.vue";
 import TasksTab from "../components/ProjectPage/TasksTab.vue";
 import {useRoute} from 'vue-router'
 import router from "../router/index.js";
+import {useModalStore} from "../stores/modalStore.js";
 
 const projectStore = useProjectStore()
+const modalStore = useModalStore()
 const currentTab = ref('tasks')
 const route = useRoute()
 const switchTab = (tab) => {
@@ -17,6 +19,10 @@ const switchTab = (tab) => {
 const toCreateTaskPage = () => {
   const projectUrl = route.params.url
   router.push(`/cabinet/project/${projectUrl}/tasks/create`)
+}
+
+const addNewTasklist = () => {
+  modalStore.open('addTasklist')
 }
 </script>
 
@@ -40,6 +46,7 @@ const toCreateTaskPage = () => {
     <div class="content-header__buttons">
       <BaseButton
           text="Добавить список"
+          @click="addNewTasklist()"
       />
       <BaseButton
           text="Добавить задачу"
