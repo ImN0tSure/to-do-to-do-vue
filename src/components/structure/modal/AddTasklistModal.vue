@@ -1,7 +1,7 @@
 <script setup>
 import {useModalStore} from "../../../stores/modalStore.js";
 import BaseModal from "./BaseModal.vue";
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import {useTasklistStore} from "../../../stores/tasklistStore.js";
 import BaseInput from "../BaseInput.vue";
 import BaseTextarea from "../BaseTextarea.vue";
@@ -11,18 +11,22 @@ import VueSpinner from "../VueSpinner.vue";
 const tasklistStore = useTasklistStore()
 const modalStore = useModalStore()
 
-const newTasklistData = tasklistStore.newTasklist
+// const newTasklistData = tasklistStore.newTasklist
+const newTasklistData = ref({
+  name: '',
+  description: ''
+})
 
 const close = () => {
-  newTasklistData.name = ''
-  newTasklistData.description = ''
+  newTasklistData.value.name = ''
+  newTasklistData.value.description = ''
   modalStore.close()
 }
 
 const addTasklist = async () => {
-  const response = await tasklistStore.createTasklist()
+  const result = await tasklistStore.createTasklist(newTasklistData.value)
 
-  if(response.success) {
+  if(result) {
     close()
   }
 }

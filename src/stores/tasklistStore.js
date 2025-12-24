@@ -11,7 +11,8 @@ export const useTasklistStore = defineStore('tasklistStore', {
                 description: ''
             },
             status: 'idle', // idle, loading, success, error
-            createTasklistStatus: 'idle' // idle, loading, success, error
+            createTasklistStatus: 'idle', // idle, loading, success, error
+            changeTasklistStatus: 'idle', // idle, loading, success, error
         }
     },
     actions: {
@@ -27,28 +28,66 @@ export const useTasklistStore = defineStore('tasklistStore', {
                 console.log(e.response?.data?.message)
             }
         },
-        async createTasklist() {
-            if(this.newTasklist.name.length > 0) {
-                this.createTasklistStatus = 'loading'
+        async createTasklist(newTasklistData) {
+            this.createTasklistStatus = 'loading'
+            if (newTasklistData.name?.length > 0) {
                 try {
                     const targetUrl = `/api/project/${this.currentProject}/tasklists`
 
-                    const response = await axios.post(targetUrl, this.newTasklist)
+                    const response = await axios.post(targetUrl, newTasklistData)
 
-                    if(response.data.success) {
+                    if (response.data.success) {
                         this.tasklists.push(response.data.tasklist)
                         this.createTasklistStatus = 'success'
                         console.log(response.data)
-                        return {success: true}
+                        return true
                     } else {
                         this.createTasklistStatus = 'error'
                         console.log(response.data)
-                        return {success: false}
+                        return false
                     }
                 } catch (e) {
                     this.createTasklistStatus = 'error'
                     console.log(e.response?.data?.message)
-                    return {success: false}
+                    return false
+                }
+            } else {
+                console.log(newTasklistData)
+            }
+        },
+        async redactTasklist(newTasklist) {
+            this.changeTasklistStatus = 'loading'
+            const tasklistId = newTasklist.id
+            const tasklistKey = Object.keys(this.tasklists).find(key => this.tasklists[key].id === tasklistId)
+            const currentTasklist = this.tasklists[tasklistKey]
+
+            if (newTasklist.name === currentTasklist.name) {
+                this.changeTasklistStatus = 'error'
+                return false
+
+            } else {
+                const newTasklistData = {
+                    name: newTasklist.name,
+                    oldName: currentTasklist.name
+                }
+
+                try {
+                    const targetUrl = `/api/project/${this.currentProject}/tasklists/${tasklistId}`
+                    const response = await axios.put(targetUrl, newTasklistData)
+
+                    if(response.data.success) {
+                        this.tasklists[tasklistKey] = newTasklist
+                        this.changeTasklistStatus = 'success'
+                        console.log(response.data)
+                        return true
+                    } else {
+                        this.changeTasklistStatus = 'error'
+                        return false
+                    }
+                } catch (e) {
+                    this.changeTasklistStatus = 'error'
+                    console.log(e.response?.data?.message)
+                    return false
                 }
             }
         }
@@ -57,7 +96,7 @@ export const useTasklistStore = defineStore('tasklistStore', {
         currentProject() {
             const projectStore = useProjectStore()
 
-            if(projectStore.currentProject.length > 0) {
+            if (projectStore.currentProject.length > 0) {
                 return projectStore.currentProject
             } else {
                 return ''
