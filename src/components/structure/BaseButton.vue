@@ -42,7 +42,7 @@ const rootClasses = computed(() => {
 
 </template>
 
-<style lang=scss scoped>
+<style lang=scss>
 .base-button {
   background: #f06292;
   color: white;

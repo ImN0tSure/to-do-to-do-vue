@@ -75,7 +75,7 @@ export const useTasklistStore = defineStore('tasklistStore', {
                     const targetUrl = `/api/project/${this.currentProject}/tasklists/${tasklistId}`
                     const response = await axios.put(targetUrl, newTasklistData)
 
-                    if(response.data.success) {
+                    if (response.data.success) {
                         this.tasklists[tasklistKey] = newTasklist
                         this.changeTasklistStatus = 'success'
                         console.log(response.data)
@@ -89,6 +89,33 @@ export const useTasklistStore = defineStore('tasklistStore', {
                     console.log(e.response?.data?.message)
                     return false
                 }
+            }
+        },
+
+        async deleteTasklist(tasklistId) {
+            this.changeTasklistStatus = 'loading'
+
+            try {
+                const targetUrl = `/api/project/${this.currentProject}/tasklists/${tasklistId}`
+
+                const response = await axios.delete(targetUrl)
+
+                if(response.data.success) {
+                    console.log(response.data.message)
+                    const tasklistKey = Object.keys(this.tasklists).find(key => this.tasklists[key].id === tasklistId)
+                    this.tasklists.splice(tasklistKey, 1)
+                    this.changeTasklistStatus = 'success'
+
+                    return true
+                } else {
+                    console.log(response.data)
+                    this.changeTasklistStatus = 'error'
+                    return false
+                }
+            } catch (e) {
+                console.log(e.response.data.message)
+                this.changeTasklistStatus = 'error'
+                return false
             }
         }
     },

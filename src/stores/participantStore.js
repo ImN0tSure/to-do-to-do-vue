@@ -42,6 +42,33 @@ export const useParticipantStore = defineStore('participantStore' , {
                 this.participantLoading = 'error'
                 console.log(e.response?.data?.message)
             }
+        },
+        async addParticipant(newParticipantEmail) {
+            this.participantLoading = 'loading'
+
+            try {
+                const targetUrl = `/api/project/${this.currentProject}/invite-participant`
+
+                const newParticipantData = {
+                    email: newParticipantEmail,
+                    project_url: this.currentProject
+                }
+
+                const response = await axios.post(targetUrl, newParticipantData)
+
+                if(response.data.success) {
+                    console.log(response.data)
+                    this.participantLoading = 'success'
+                    return true
+                } else {
+                    this.participantLoading = 'error'
+                    return false
+                }
+            } catch (e) {
+                console.log(e.response?.data?.message)
+                this.participantLoading = 'error'
+                return false
+            }
         }
     },
     getters: {

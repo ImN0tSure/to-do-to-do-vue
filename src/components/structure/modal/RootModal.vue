@@ -3,6 +3,7 @@ import {useModalStore} from "../../../stores/modalStore.js";
 import ParticipantModal from "./ParticipantModal.vue";
 import AddTasklistModal from "./AddTasklistModal.vue";
 import RedactTasklistModal from "./RedactTasklistModal.vue";
+import AddParticipantModal from "./AddParticipantModal.vue";
 
 const modalStore = useModalStore()
 </script>
@@ -19,6 +20,9 @@ const modalStore = useModalStore()
   <RedactTasklistModal
     v-if="modalStore.type === 'redactTasklist'"
     :redact-tasklist = modalStore.payload
+  />
+  <AddParticipantModal
+    v-if="modalStore.type === 'addParticipant'"
   />
 </template>
 

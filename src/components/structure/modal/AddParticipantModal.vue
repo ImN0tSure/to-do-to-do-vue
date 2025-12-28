@@ -7,24 +7,20 @@ import BaseInput from "../BaseInput.vue";
 import BaseTextarea from "../BaseTextarea.vue";
 import BaseButton from "../BaseButton.vue";
 import VueSpinner from "../VueSpinner.vue";
+import {useParticipantStore} from "../../../stores/participantStore.js";
 
-const tasklistStore = useTasklistStore()
+const participantStore = useParticipantStore()
 const modalStore = useModalStore()
 
-// const newTasklistData = tasklistStore.newTasklist
-const newTasklistData = ref({
-  name: '',
-  description: ''
-})
+const newParticipantEmail = ref('')
 
 const close = () => {
-  newTasklistData.value.name = ''
-  newTasklistData.value.description = ''
+  newParticipantEmail.value = ''
   modalStore.close()
 }
 
-const addTasklist = async () => {
-  const result = await tasklistStore.createTasklist(newTasklistData.value)
+const addParticipant = async () => {
+  const result = await participantStore.addParticipant(newParticipantEmail.value)
 
   if(result) {
     close()
@@ -34,35 +30,30 @@ const addTasklist = async () => {
 
 <template>
   <BaseModal @close="close">
-    <div class="new-tasklist">
-      <h3 class="new-tasklist__header">Новый список</h3>
+    <div class="new-participant">
+      <h3 class="new-participant__header">Добавление участника в проект</h3>
       <BaseInput
           :with-label="true"
-          label="Название списка"
-          name="name"
-          placeholder="Введите название"
-          class="add-tasklist-input"
+          type="email"
+          label="Email пользователя"
+          name="email"
+          placeholder="Введите email"
+          class="add-participant-input"
           size="s"
-          v-model="newTasklistData.name"
-      />
-      <BaseTextarea
-        :with-label="true"
-        label="Описание"
-        placeholder="Описание списка"
-        v-model="newTasklistData.description"
+          v-model="newParticipantEmail"
       />
       <BaseButton
-          v-if="tasklistStore.createTasklistStatus !== 'loading'"
+          v-if="participantStore.participantLoading !== 'loading'"
           text="Добавить"
-          @click="addTasklist"
+          @click="addParticipant"
       />
-      <VueSpinner v-else-if="tasklistStore.createTasklistStatus === 'loading'"/>
+      <VueSpinner v-else-if="participantStore.participantLoading === 'loading'"/>
     </div>
   </BaseModal>
 </template>
 
 <style lang=scss scoped>
-.new-tasklist {
+.new-participant {
   background: #fff0f6;
   padding: 25px 30px;
   border-radius: 20px;
@@ -81,4 +72,5 @@ const addTasklist = async () => {
     font-size: 1.5em;
   }
 }
+
 </style>

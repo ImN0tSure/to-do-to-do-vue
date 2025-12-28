@@ -1,5 +1,4 @@
 <script setup>
-import {computed, defineProps, ref} from 'vue'
 import {useTasklistStore} from "../../../stores/tasklistStore.js";
 import BaseModal from "./BaseModal.vue";
 import {useModalStore} from "../../../stores/modalStore.js";
@@ -18,7 +17,15 @@ const close = () => {
 const saveNewTasklistName = async () => {
   const result = await tasklistStore.redactTasklist(modalStore.payload)
 
-  if(result) {
+  if (result) {
+    close()
+  }
+}
+
+const deleteTasklist = async () => {
+  const result = await tasklistStore.deleteTasklist(modalStore.payload.id)
+
+  if (result) {
     close()
   }
 }
@@ -38,12 +45,22 @@ const saveNewTasklistName = async () => {
           size="s"
           v-model="modalStore.payload.name"
       />
-      <BaseButton
+      <div
           v-if="tasklistStore.changeTasklistStatus !== 'loading'"
-          text="Сохранить"
-          @click="saveNewTasklistName"
-      />
+          class="buttons-wrapper"
+      >
+        <BaseButton
+            text="Сохранить"
+            @click="saveNewTasklistName"
+        />
+        <BaseButton
+            class="delete-button"
+            text="X Удалить список"
+            @click="deleteTasklist"
+        />
+      </div>
       <VueSpinner v-else-if="tasklistStore.changeTasklistStatus === 'loading'"/>
+
     </section>
   </BaseModal>
 </template>
@@ -66,5 +83,17 @@ h3 {
   margin: 0 0 10px;
   color: #9e1b56;
   text-align: center;
+}
+
+.delete-button {
+  max-width: 53%;
+  background: #d13737;
+  align-self: flex-end;
+  margin-top: 20px;
+}
+
+.buttons-wrapper {
+  display: flex;
+  flex-direction: column;
 }
 </style>

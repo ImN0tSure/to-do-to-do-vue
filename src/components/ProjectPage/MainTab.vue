@@ -1,7 +1,7 @@
 <script setup>
 import {useProjectStore} from "../../stores/projectStore.js";
 import {useParticipantStore} from "../../stores/participantStore.js";
-import {ref, onMounted, computed} from 'vue'
+import {computed, onMounted} from 'vue'
 import ParticipantPreview from "./ParticipantPreview.vue";
 import VueSpinner from "../structure/VueSpinner.vue";
 import BaseButton from "../structure/BaseButton.vue";
@@ -24,6 +24,10 @@ const showParticipantInfo = (id) => {
   modalStore.open('participant', {userId: id})
 }
 
+const openAddParticipantModal = () => {
+  modalStore.open('addParticipant')
+}
+
 </script>
 
 <template>
@@ -39,15 +43,15 @@ const showParticipantInfo = (id) => {
     <VueSpinner
         v-if="participantStore.participantsLoading === 'loading'"
     />
-    <div class="participants"  v-if="participantStore.participantsLoading === 'success'">
+    <div class="participants" v-if="participantStore.participantsLoading === 'success'">
       <ParticipantPreview
-        v-for="participant in participantStore.participants"
-        :key="participant.user_id"
-        :name="participant.name"
-        :surname="participant.surname"
-        :img="participant.avatar_img"
-        :status="participant.pivot.status"
-        @click="showParticipantInfo(participant.user_id)"
+          v-for="participant in participantStore.participants"
+          :key="participant.user_id"
+          :name="participant.name"
+          :surname="participant.surname"
+          :img="participant.avatar_img"
+          :status="participant.pivot.status"
+          @click="showParticipantInfo(participant.user_id)"
       />
     </div>
     <p v-if="participantStore.participantsLoading === 'error'">
@@ -56,7 +60,8 @@ const showParticipantInfo = (id) => {
   </div>
   <div class="section control-buttons">
     <BaseButton
-      text="Добавить участника"
+        text="Добавить участника"
+        @click="openAddParticipantModal"
     />
     <BaseButton
         text="Исключить участников"
