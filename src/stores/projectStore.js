@@ -7,7 +7,8 @@ export const useProjectStore = defineStore ('projectStore', {
         return {
             projects: null,
             currentProject: '',
-            status: 'idle' // idle, loading, success, error
+            status: 'idle', // idle, loading, success, error
+            quitStatus: 'idle', // idle, loading, success, error
         }
     },
     actions: {
@@ -45,6 +46,29 @@ export const useProjectStore = defineStore ('projectStore', {
             } catch (e) {
                 this.status = 'error'
                 console.log(e.response?.data?.message)
+            }
+        },
+        async quitProject() {
+            this.quitStatus = 'loading'
+            try {
+                const targetUrl = `/api/project/${this.currentProject}/quit`
+
+                const response = await axios.get(targetUrl)
+
+                if (response.data.success) {
+                    this.projects = this.projects.filter(project => project.url !== this.currentProject)
+                    this.currentProject = ''
+                    this.quitStatus = 'success'
+                    return true
+                } else {
+                    this.quitStatus = 'error'
+                    console.log(response.data)
+                    return false
+                }
+            } catch (e) {
+                this.quitStatus = 'error'
+                console.log(e.response.data.message)
+                return false
             }
         }
     },

@@ -6,9 +6,14 @@ import ParticipantPreview from "./ParticipantPreview.vue";
 import VueSpinner from "../structure/VueSpinner.vue";
 import BaseButton from "../structure/BaseButton.vue";
 import {useModalStore} from "../../stores/modalStore.js";
+import {useTasklistStore} from "../../stores/tasklistStore.js";
+import {useTaskStore} from "../../stores/taskStore.js";
+import router from "../../router/index.js";
 
 const modalStore = useModalStore()
 const projectStore = useProjectStore()
+const tasklistStore = useTasklistStore()
+const taskStore = useTaskStore()
 const participantStore = useParticipantStore()
 
 onMounted(() => {
@@ -16,7 +21,7 @@ onMounted(() => {
 })
 
 const projectDescription = computed(() => {
-  return projectStore.projects[projectStore.currentProjectKey].description
+  return projectStore?.projects[projectStore.currentProjectKey]?.description
 })
 
 const showParticipantInfo = (id) => {
@@ -30,6 +35,20 @@ const openAddParticipantModal = () => {
 
 const openExcludeParticipantModal = () => {
   modalStore.open('excludeParticipant')
+}
+
+const quitCurrentProject = async () => {
+  const result = await projectStore.quitProject()
+
+  if (result) {
+    taskStore.clear()
+    tasklistStore.clear()
+    participantStore.clear()
+
+    router.push({name: 'cabinet'})
+  } else {
+    console.log('Не удалось выйти из проекта.')
+  }
 }
 
 </script>
@@ -71,8 +90,11 @@ const openExcludeParticipantModal = () => {
         text="Исключить участников"
         @click="openExcludeParticipantModal"
     />
+    <VueSpinner v-if="projectStore.quitStatus === 'loading'"/>
     <BaseButton
+        v-else
         text="Покинуть проект"
+        @click="quitCurrentProject"
     />
   </div>
 

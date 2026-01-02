@@ -100,7 +100,7 @@ export const useTasklistStore = defineStore('tasklistStore', {
 
                 const response = await axios.delete(targetUrl)
 
-                if(response.data.success) {
+                if (response.data.success) {
                     console.log(response.data.message)
                     const tasklistKey = Object.keys(this.tasklists).find(key => this.tasklists[key].id === tasklistId)
                     this.tasklists.splice(tasklistKey, 1)
@@ -117,6 +117,16 @@ export const useTasklistStore = defineStore('tasklistStore', {
                 this.changeTasklistStatus = 'error'
                 return false
             }
+        },
+        clear() {
+            this.tasklists = []
+                this.newTasklist = {
+                    name: '',
+                    description: ''
+                }
+            this.status = 'idle'
+            this.createTasklistStatus = 'idle'
+            this.changeTasklistStatus = 'idle'
         }
     },
     getters: {

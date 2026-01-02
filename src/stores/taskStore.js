@@ -51,7 +51,7 @@ export const useTaskStore = defineStore('taskStore', {
             try {
                 const response = await axios.get(`/api/project/${projectUrl}/tasks/${taskId}`)
 
-                if(response.data.success) {
+                if (response.data.success) {
                     this.currentTask = response.data.task
                     this.status = 'success'
                     console.log(response.data)
@@ -71,7 +71,7 @@ export const useTaskStore = defineStore('taskStore', {
             try {
                 const response = await axios.put(targetUrl, this.currentTask)
 
-                if(response.data.success) {
+                if (response.data.success) {
                     this.status = 'success'
                     console.log(response.data)
                 }
@@ -81,7 +81,7 @@ export const useTaskStore = defineStore('taskStore', {
             }
         },
         async storeTask(newTask) {
-            this.status='loading'
+            this.status = 'loading'
 
             const projectUrl = this.currentProject
             const targetUrl = `/api/project/${projectUrl}/tasks`
@@ -89,7 +89,7 @@ export const useTaskStore = defineStore('taskStore', {
             try {
                 const response = await axios.post(targetUrl, newTask)
 
-                if(response.data.success) {
+                if (response.data.success) {
                     this.status = 'success'
                     console.log(response?.data)
                     this.router.push(`/cabinet/project/${projectUrl}`)
@@ -98,13 +98,18 @@ export const useTaskStore = defineStore('taskStore', {
                 this.status = 'error'
                 console.log(e.response?.data?.message)
             }
+        },
+        clear() {
+            this.tasks = []
+            this.status = 'idle'
+            this.currentTask = []
         }
     },
     getters: {
         currentProject() {
             const projectStore = useProjectStore()
 
-            if(projectStore.currentProject.length > 0) {
+            if (projectStore.currentProject.length > 0) {
                 return projectStore.currentProject
             } else {
                 return ''

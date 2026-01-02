@@ -104,6 +104,13 @@ export const useParticipantStore = defineStore('participantStore' , {
             userIds.forEach((id) => {
                 this.participants = this.participants.filter(participant => participant.user_id !== id)
             })
+        },
+        clear() {
+            this.participants = {}
+            this.selectedParticipant = {}
+            this.participantsLoading = 'idle'
+            this.participantLoading = 'idle'
+            this.excludeParticipantLoading = 'idle'
         }
     },
     getters: {
