@@ -41,10 +41,17 @@ const listArrow = computed(() => {
 
 <template>
   <div class="task-list">
-    <div class="task-list__header" @click="toggleListDisplay()">
-      <div class="edit-button" v-if="changeable === true">Редактировать</div>
+    <div class="task-list__header">
+      <div
+          class="edit-button"
+          v-if="props.changeable === true"
+          @click="$emit('redactTasklist')"
+      >Редактировать</div>
       <h2>{{ header }}</h2>
-      <span class="toggle-arrow">{{ listArrow }}</span>
+      <span
+          class="toggle-arrow"
+          @click="toggleListDisplay()"
+      >{{ listArrow }}</span>
     </div>
     <div class="tasks" v-show="listOpened">
       <TaskListRowHeader/>
@@ -55,8 +62,8 @@ const listArrow = computed(() => {
           :priority="task.priority"
           :time="task.time"
           :id="task.id"
-          :project-url="task.projectUrl"
           @click="showTask(task.projectUrl, task.id)"
+          :project-url="task.projectUrl"
       />
     </div>
   </div>

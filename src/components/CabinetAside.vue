@@ -18,6 +18,10 @@ const chooseProject = (projectUrl) => {
   router.push('/cabinet/project/' + projectUrl)
 }
 
+const createProject = () => {
+  router.push('/cabinet/project/create')
+}
+
 </script>
 
 <template>
@@ -31,6 +35,7 @@ const chooseProject = (projectUrl) => {
     <ul>
       <ProjectListItem
         v-for="project in projectStore.projects"
+        :key="project.id"
         :project-name="project.name"
         :project-url="project.url"
         @click="chooseProject(project.url)"
@@ -38,7 +43,7 @@ const chooseProject = (projectUrl) => {
       />
     </ul>
   </div>
-  <div class="add-project-btn">+</div>
+  <div class="add-project-btn" @click="createProject">+</div>
 </aside>
 </template>
 

@@ -1,16 +1,12 @@
 <script setup>
-import {useAuthStore} from "../stores/authStore.js";
+import {useAuthStore} from "../../../stores/authStore.js";
 import {computed} from 'vue'
-import VueSpinner from "./structure/VueSpinner.vue";
+import VueSpinner from "../VueSpinner.vue";
 
 const authStore = useAuthStore()
 
 const checkAuthorization = computed(() => {
   return !!authStore.isLoggedIn
-})
-
-const isAuthResolved = computed(() => {
-  return authStore.isAuthResolved
 })
 
 const logout = () => {
@@ -19,8 +15,8 @@ const logout = () => {
 </script>
 
 <template>
-
-  <nav v-if="isAuthResolved">
+  <VueSpinner v-if="authStore.status === 'loading'"/>
+  <nav v-else>
     <div v-if="checkAuthorization">
       <RouterLink class="nav-item" to="/cabinet">Главная</RouterLink>
       <RouterLink class="nav-item" to="/notifications">Уведомления</RouterLink>
@@ -33,7 +29,7 @@ const logout = () => {
       <RouterLink class="nav-item" to="/registration">Зарегистрироваться</RouterLink>
     </div>
   </nav>
-  <VueSpinner v-else/>
+
 </template>
 
 <style scoped>

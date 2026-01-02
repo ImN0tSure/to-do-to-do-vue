@@ -17,15 +17,19 @@ const props = defineProps({
   surname: {
     type: String,
     default: ''
+  },
+  excluded: {
+    type: Boolean,
+    default: false
   }
 })
 
 const userStatus = computed(() => {
   switch (props.status) {
     case '1':
-      return 'создатель'
-    case '0':
       return 'куратор'
+    case '0':
+      return 'создатель'
     default:
       return 'исполнитель'
   }
@@ -39,7 +43,7 @@ const userStatus = computed(() => {
       <img :src="img" alt="здесь могла быть ваша реклама" />
     </div>
     <div class="participant__info">
-      <div class="name">
+      <div class="name" :class="{ excluded }">
         <strong>{{ name }} {{ surname }}</strong>
       </div>
       <div class="status">
@@ -49,12 +53,20 @@ const userStatus = computed(() => {
   </div>
 </template>
 
-<style lang=scss scoped>
+<style lang=scss>
 .participant {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
   width: 260px;
+  justify-content: center;
+  color: rgb(122, 35, 80);
+
+  &:hover {
+    cursor: pointer;
+    border-radius: 40px;
+    color: rgb(240, 98, 146);
+  }
 
   &__photo {
     margin-right: 10px;
@@ -72,13 +84,15 @@ const userStatus = computed(() => {
       height: 100%;
       object-fit: cover;
     }
+    
+
   }
 
   &__info {
     position: relative;
 
     & div {
-      color: rgb(122, 35, 80);
+
       max-width: 200px;
     }
 
@@ -86,5 +100,13 @@ const userStatus = computed(() => {
       position: relative;
     }
   }
+}
+
+.excluded:before {
+  content: "";
+  border-bottom: 3px solid #7a2350;
+  position: absolute;
+  width: 100%;
+  height: 50%;
 }
 </style>

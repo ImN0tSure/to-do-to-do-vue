@@ -16,7 +16,7 @@ const projectStore = useProjectStore()
 const participantStore = useParticipantStore()
 const tasklistStore = useTasklistStore()
 const taskStore = useTaskStore()
-const dataLoaded = ref(false)
+
 
 const executorOptions = computed(() => {
   const data = {}
@@ -56,7 +56,7 @@ onMounted(async () => {
       tasklistStore.getTasklists(),
       participantStore.getParticipants()
     ])
-    dataLoaded.value = true
+
   } catch (e) {
     console.error(e)
   }
@@ -65,7 +65,7 @@ onMounted(async () => {
 
 <template>
   <VueSpinner v-if="taskStore.status === 'loading'"/>
-  <div v-else>
+  <div v-else-if="taskStore.status === 'success'">
     <h2 class="header">Задача</h2>
     <EditableInput
         label="Задача"
@@ -112,13 +112,17 @@ onMounted(async () => {
         :options="inProgressOptions"
         :with-nullable=false
     />
+    <BaseButton
+        size="m"
+        text="Сохранить"
+        @click.prevent.stop="saveTask"
+        class="date-time"
+    />
   </div>
-  <BaseButton
-      size="m"
-      text="Сохранить"
-      @click.prevent.stop="saveTask"
-      class="date-time"
-  />
+  <div v-else-if="taskStore.status === 'error'">
+    Ошибка загрузки. Смотрите консоль.
+  </div>
+
 </template>
 
 <style lang=scss scoped>

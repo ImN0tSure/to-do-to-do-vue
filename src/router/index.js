@@ -10,6 +10,8 @@ import CabinetLayout from "../layouts/CabinetLayout.vue";
 import UserCabinetPage from "../pages/UserCabinetPage.vue";
 import {useProjectStore} from "../stores/projectStore.js";
 import TaskPage from "../pages/TaskPage.vue";
+import CreateTaskPage from "../pages/CreateTaskPage.vue";
+import CreateProjectPage from "../pages/CreateProjectPage.vue";
 
 
 const routes = [
@@ -45,9 +47,19 @@ const routes = [
                 }
             },
             {
+                path: 'project/create',
+                name: 'project.create',
+                component: CreateProjectPage
+            },
+            {
                 path: 'project/:url/tasks/:taskId',
                 name: 'project.task',
                 component: TaskPage
+            },
+            {
+                path: 'project/:url/tasks/create',
+                name: 'project.task.create',
+                component: CreateTaskPage
             }
         ]
     },
@@ -83,7 +95,7 @@ function isToGuestPage(pageName) {
 router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore()
 
-    if (!authStore.isAuthResolved) {
+    if (authStore.status !== 'success') {
         await authStore.restoreAuth()
     }
 
