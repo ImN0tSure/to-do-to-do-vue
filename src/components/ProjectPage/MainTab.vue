@@ -28,6 +28,10 @@ const openAddParticipantModal = () => {
   modalStore.open('addParticipant')
 }
 
+const openExcludeParticipantModal = () => {
+  modalStore.open('excludeParticipant')
+}
+
 </script>
 
 <template>
@@ -65,6 +69,7 @@ const openAddParticipantModal = () => {
     />
     <BaseButton
         text="Исключить участников"
+        @click="openExcludeParticipantModal"
     />
     <BaseButton
         text="Покинуть проект"

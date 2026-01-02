@@ -8,7 +8,8 @@ export const useParticipantStore = defineStore('participantStore' , {
             participants: {},
             selectedParticipant: {},
             participantsLoading: 'idle', // idle, loading, success, error
-            participantLoading: 'idle' // idle, loading, success, error
+            participantLoading: 'idle', // idle, loading, success, error
+            excludeParticipantLoading: 'idle' // idle, loading, success, error
         }
     },
     actions: {
@@ -59,6 +60,7 @@ export const useParticipantStore = defineStore('participantStore' , {
                 if(response.data.success) {
                     console.log(response.data)
                     this.participantLoading = 'success'
+
                     return true
                 } else {
                     this.participantLoading = 'error'
@@ -69,6 +71,39 @@ export const useParticipantStore = defineStore('participantStore' , {
                 this.participantLoading = 'error'
                 return false
             }
+        },
+        async excludeParticipants(userIds) {
+            this.excludeParticipantLoading = 'loading'
+
+            try {
+                const targetUrl = `/api/project/${this.currentProject}/participants/exclude`
+                const data = {
+                    ids: userIds
+                }
+
+                const response = await axios.put(targetUrl, data)
+
+                if(response.data.success) {
+                    this.excludeParticipantLoading = 'success'
+                    console.log(response.data)
+                    return true
+                } else {
+                    this.excludeParticipantLoading = 'error'
+                    console.log(response.data)
+                    return false
+                }
+
+            } catch (e) {
+                this.excludeParticipantLoading = 'error'
+                console.log(e.response.data.message)
+                return false
+            }
+        },
+        removeParticipantsFromStore(userIds) {
+            console.log(userIds)
+            userIds.forEach((id) => {
+                this.participants = this.participants.filter(participant => participant.user_id !== id)
+            })
         }
     },
     getters: {

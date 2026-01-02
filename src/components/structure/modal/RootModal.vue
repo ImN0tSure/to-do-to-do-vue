@@ -4,6 +4,7 @@ import ParticipantModal from "./ParticipantModal.vue";
 import AddTasklistModal from "./AddTasklistModal.vue";
 import RedactTasklistModal from "./RedactTasklistModal.vue";
 import AddParticipantModal from "./AddParticipantModal.vue";
+import ExcludeParticipantModal from "./ExcludeParticipantModal.vue";
 
 const modalStore = useModalStore()
 </script>
@@ -23,6 +24,9 @@ const modalStore = useModalStore()
   />
   <AddParticipantModal
     v-if="modalStore.type === 'addParticipant'"
+  />
+  <ExcludeParticipantModal
+    v-if="modalStore.type === 'excludeParticipant'"
   />
 </template>
 
