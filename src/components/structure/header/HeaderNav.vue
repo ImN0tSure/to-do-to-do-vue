@@ -19,7 +19,7 @@ const logout = () => {
   <nav v-else>
     <div v-if="checkAuthorization">
       <RouterLink class="nav-item" to="/cabinet">Главная</RouterLink>
-      <RouterLink class="nav-item" to="/notifications">Уведомления</RouterLink>
+      <RouterLink class="nav-item" to="/cabinet/notifications">Уведомления</RouterLink>
       <RouterLink class="nav-item" to="/profile">Профиль</RouterLink>
       <span class="nav-item" @click="logout">Выйти</span>
     </div>

@@ -12,6 +12,7 @@ import {useProjectStore} from "../stores/projectStore.js";
 import TaskPage from "../pages/TaskPage.vue";
 import CreateTaskPage from "../pages/CreateTaskPage.vue";
 import CreateProjectPage from "../pages/CreateProjectPage.vue";
+import NotificationPage from "../pages/NotificationPage.vue";
 
 
 const routes = [
@@ -60,6 +61,11 @@ const routes = [
                 path: 'project/:url/tasks/create',
                 name: 'project.task.create',
                 component: CreateTaskPage
+            },
+            {
+                path: 'notifications',
+                name: 'notifications',
+                component: NotificationPage
             }
         ]
     },
