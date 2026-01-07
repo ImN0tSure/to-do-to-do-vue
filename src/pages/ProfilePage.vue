@@ -11,7 +11,7 @@ const newUserInfo = ref({})
 const newAvatarPreviewUrl = ref('')
 const resetUserInfo = () => {
   newUserInfo.value = {...userinfoStore.userInfo}
-  newUserInfo.value.avatar_file = null
+  newUserInfo.value.avatar_file = ''
 }
 
 onMounted(async () => {
@@ -28,7 +28,7 @@ const acceptAvatar = (event) => {
   newAvatarPreviewUrl.value = newUserInfo.value.avatar_file ? URL.createObjectURL(newUserInfo.value.avatar_file) : ''
 
   if (newAvatarPreviewUrl.value.length < 1) {
-    newUserInfo.value.avatar_file = null
+    newUserInfo.value.avatar_file = ''
   }
 }
 
