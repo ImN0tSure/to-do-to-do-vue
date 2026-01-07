@@ -56,7 +56,7 @@ const sendForm = () => {
       <input
           type="file"
           id="avatarUpload"
-          name="avatar_img"
+          name="avatar_file"
           accept="image/*"
           @change="acceptAvatar"
       >
