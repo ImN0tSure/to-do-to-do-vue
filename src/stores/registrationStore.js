@@ -33,7 +33,7 @@ export const useRegistrationStore = defineStore('registrationStore', {
             }
 
             if (this.avatarImg) {
-                formData.append('avatar_img', this.avatarImg)
+                formData.append('avatar_file', this.avatarImg)
             }
 
             formData.append('token', this.regToken)

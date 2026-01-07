@@ -13,6 +13,7 @@ import TaskPage from "../pages/TaskPage.vue";
 import CreateTaskPage from "../pages/CreateTaskPage.vue";
 import CreateProjectPage from "../pages/CreateProjectPage.vue";
 import NotificationPage from "../pages/NotificationPage.vue";
+import ProfilePage from "../pages/ProfilePage.vue";
 
 
 const routes = [
@@ -66,6 +67,11 @@ const routes = [
                 path: 'notifications',
                 name: 'notifications',
                 component: NotificationPage
+            },
+            {
+                path: 'profile',
+                name: 'profile',
+                component: ProfilePage
             }
         ]
     },
