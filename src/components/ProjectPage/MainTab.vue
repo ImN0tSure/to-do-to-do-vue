@@ -9,9 +9,11 @@ import {useModalStore} from "../../stores/modalStore.js";
 import {useTasklistStore} from "../../stores/tasklistStore.js";
 import {useTaskStore} from "../../stores/taskStore.js";
 import router from "../../router/index.js";
+import {useRoleStore} from "../../stores/roleStore.js";
 
 const modalStore = useModalStore()
 const projectStore = useProjectStore()
+const roleStore = useRoleStore()
 const tasklistStore = useTasklistStore()
 const taskStore = useTaskStore()
 const participantStore = useParticipantStore()
@@ -85,10 +87,12 @@ const quitCurrentProject = async () => {
     <BaseButton
         text="Добавить участника"
         @click="openAddParticipantModal"
+        v-if="roleStore.can('project.participant.invite')"
     />
     <BaseButton
         text="Исключить участников"
         @click="openExcludeParticipantModal"
+        v-if="roleStore.can('project.participant.exclude')"
     />
     <VueSpinner v-if="projectStore.quitStatus === 'loading'"/>
     <BaseButton

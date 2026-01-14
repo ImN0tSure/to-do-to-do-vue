@@ -1,8 +1,9 @@
 import {defineStore} from 'pinia'
 import axios from "../api/axios.js"
 import {useProjectStore} from "./projectStore.js";
+import {useAuthStore} from "./authStore.js";
 
-export const useParticipantStore = defineStore('participantStore' , {
+export const useParticipantStore = defineStore('participantStore', {
     state() {
         return {
             participants: {},
@@ -32,7 +33,7 @@ export const useParticipantStore = defineStore('participantStore' , {
             try {
                 const response = await axios.get(targetUrl)
 
-                if(response.data.success) {
+                if (response.data.success) {
                     this.selectedParticipant = response.data.participant
                     this.participantLoading = 'success'
                 } else {
@@ -57,7 +58,7 @@ export const useParticipantStore = defineStore('participantStore' , {
 
                 const response = await axios.post(targetUrl, newParticipantData)
 
-                if(response.data.success) {
+                if (response.data.success) {
                     console.log(response.data)
                     this.participantLoading = 'success'
 
@@ -83,7 +84,7 @@ export const useParticipantStore = defineStore('participantStore' , {
 
                 const response = await axios.put(targetUrl, data)
 
-                if(response.data.success) {
+                if (response.data.success) {
                     this.excludeParticipantLoading = 'success'
                     console.log(response.data)
                     return true
@@ -117,10 +118,16 @@ export const useParticipantStore = defineStore('participantStore' , {
         currentProject() {
             const projectStore = useProjectStore()
 
-            if(projectStore.currentProject.length > 0) {
+            if (projectStore.currentProject.length > 0) {
                 return projectStore.currentProject
             } else {
                 return ''
+            }
+        },
+        currentUserParticipant() {
+            const authStore = useAuthStore()
+            if(this.participants.length > 0) {
+                return this.participants?.filter(p => p.user_id === authStore.user.id)
             }
         }
     }

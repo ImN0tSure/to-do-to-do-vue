@@ -74,6 +74,9 @@ export const useTaskStore = defineStore('taskStore', {
                 if (response.data.success) {
                     this.status = 'success'
                     console.log(response.data)
+                } else {
+                    this.status = 'error'
+                    console.log(response.data)
                 }
             } catch (e) {
                 this.status = 'error'
@@ -93,6 +96,9 @@ export const useTaskStore = defineStore('taskStore', {
                     this.status = 'success'
                     console.log(response?.data)
                     this.router.push(`/cabinet/project/${projectUrl}`)
+                } else {
+                    this.status = 'error'
+                    console.log(response.data)
                 }
             } catch (e) {
                 this.status = 'error'

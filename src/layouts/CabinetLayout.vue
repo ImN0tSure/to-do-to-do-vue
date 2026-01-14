@@ -2,8 +2,24 @@
 import CabinetAside from "../components/CabinetAside.vue";
 import RootModal from "../components/structure/modal/RootModal.vue";
 import {useModalStore} from "../stores/modalStore.js";
+import {watch} from "vue";
+import {useProjectStore} from "../stores/projectStore.js";
+import {useRoleStore} from "../stores/roleStore.js";
 
 const modalStore = useModalStore()
+const projectStore = useProjectStore()
+const roleStore = useRoleStore()
+
+watch(() => projectStore.currentProject,
+    async (newProject, oldProject) => {
+      roleStore.unset()
+
+      if (newProject) {
+        await projectStore.getProjectRole()
+      }
+    },
+    {immediate: true}
+)
 </script>
 
 <template>

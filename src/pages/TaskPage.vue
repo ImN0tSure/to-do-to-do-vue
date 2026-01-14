@@ -10,9 +10,13 @@ import VueSpinner from "../components/structure/VueSpinner.vue";
 import EditableBaseSelectInput from "../components/structure/EditableBaseSelectInput.vue";
 import EditableTextarea from "../components/structure/EditableTextarea.vue";
 import BaseButton from "../components/structure/BaseButton.vue";
+import {useRoleStore} from "../stores/roleStore.js";
+import {useAuthStore} from "../stores/authStore.js";
 
 const route = useRoute()
 const projectStore = useProjectStore()
+const authStore = useAuthStore()
+const roleStore = useRoleStore()
 const participantStore = useParticipantStore()
 const tasklistStore = useTasklistStore()
 const taskStore = useTaskStore()
@@ -20,17 +24,39 @@ const taskStore = useTaskStore()
 
 const executorOptions = computed(() => {
   const data = {}
-  if(participantStore?.participants?.length > 0) {
-    participantStore.participants.forEach(({name, surname, user_id}) => {
-      data[user_id] = `${name} ${surname}`
-    })
+  const currentTaskExecutorId = taskStore.currentTask.executor_id
+  const currentUserId = authStore.user.id
+
+  if (participantStore?.participants?.length > 0) {
+
+    if (roleStore.can('task.update.executor.self') && (!currentTaskExecutorId || currentTaskExecutorId === currentUserId)) {
+      participantStore.currentUserParticipant.forEach(({name, surname, user_id}) => {
+        data[user_id] = `${name} ${surname}`
+      })
+    } else {
+      participantStore.participants.forEach(({name, surname, user_id}) => {
+        data[user_id] = `${name} ${surname}`
+      })
+    }
   }
+
   return data
+})
+
+const isExecutorEditable = computed(() => {
+  if (roleStore.can('task.update')) {
+    return true
+  } else if (roleStore.can('task.update.executor.self')) {
+    const currentExecutorId = taskStore.currentTask.executor_id
+    return !currentExecutorId || currentExecutorId === authStore.user.id
+  } else {
+    return false
+  }
 })
 
 const tasklistOptions = computed(() => {
   const data = {}
-  if(tasklistStore?.tasklists?.length > 0) {
+  if (tasklistStore?.tasklists?.length > 0) {
     tasklistStore.tasklists.forEach(({id, name}) => {
       data[id] = name
     })
@@ -52,6 +78,7 @@ onMounted(async () => {
 
   try {
     await Promise.all([
+      taskStore.getTasks(),
       taskStore.getTask(projectUrl, taskId),
       tasklistStore.getTasklists(),
       participantStore.getParticipants()
@@ -70,47 +97,53 @@ onMounted(async () => {
     <EditableInput
         label="Задача"
         v-model="taskStore.currentTask.name"
+        :is-editable="roleStore.can('task.update')"
     />
     <EditableTextarea
-      label="Описание"
-      v-model="taskStore.currentTask.description"
+        label="Описание"
+        v-model="taskStore.currentTask.description"
+        :is-editable="roleStore.can('task.update')"
     />
     <EditableBaseSelectInput
-      label="Исполнитель"
-      v-model="taskStore.currentTask.executor_id"
-      :options="executorOptions"
+        label="Исполнитель"
+        v-model="taskStore.currentTask.executor_id"
+        :options="executorOptions"
+        :is-editable="isExecutorEditable"
     />
     <EditableBaseSelectInput
         label="Текущий список"
         v-model="taskStore.currentTask.tasklist_id"
         :options="tasklistOptions"
         :with-nullable="false"
+        :is-editable="roleStore.can('task.update') || roleStore.can('task.update.tasklist')"
     />
     <EditableInput
-      label="Дата окончания"
-      type="date"
-      v-model="taskStore.currentTask.end_date"
-      :is-editable=true
-      class="date-time"
+        label="Дата окончания"
+        type="date"
+        v-model="taskStore.currentTask.end_date"
+        :is-editable="roleStore.can('task.update')"
+        class="date-time"
     />
     <EditableInput
         label="Время окончания"
         type="time"
         v-model="taskStore.currentTask.end_time"
-        :is-editable=true
+        :is-editable="roleStore.can('task.update')"
         class="date-time"
     />
     <EditableBaseSelectInput
-      label="Приоритет"
-      v-model="taskStore.currentTask.priority"
-      :options="priorityOptions"
-      :with-nullable=false
+        label="Приоритет"
+        v-model="taskStore.currentTask.priority"
+        :options="priorityOptions"
+        :with-nullable=false
+        :is-editable="roleStore.can('task.update')"
     />
     <EditableBaseSelectInput
         label="Статус"
         v-model="taskStore.currentTask.in_progress"
         :options="inProgressOptions"
         :with-nullable=false
+        :is-editable="roleStore.can('task.update') || roleStore.can('task.update.status')"
     />
     <BaseButton
         size="m"

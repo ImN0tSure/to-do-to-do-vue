@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import axios from "../api/axios.js"
 import {useRoute} from 'vue-router'
+import {useRoleStore} from "./roleStore.js";
 
 export const useProjectStore = defineStore ('projectStore', {
     state() {
@@ -69,6 +70,26 @@ export const useProjectStore = defineStore ('projectStore', {
                 this.quitStatus = 'error'
                 console.log(e.response.data.message)
                 return false
+            }
+        },
+        async getProjectRole () {
+            if (this.currentProject.length < 1) {
+                return false
+            }
+
+            try {
+                const response = await axios.get(`/api/project/${this.currentProject}/role`)
+
+                if (response.data.success) {
+                    const roleStore = useRoleStore()
+                    console.log(response.data)
+                    const data = response.data
+                    roleStore.set(data.role, data.permissions)
+                } else {
+                    console.log(response.data)
+                }
+            } catch (e) {
+                console.log(e.response.data.message)
             }
         }
     },
