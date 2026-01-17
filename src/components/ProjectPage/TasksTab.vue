@@ -5,8 +5,10 @@ import VueSpinner from "../structure/VueSpinner.vue";
 import TaskList from "../TaskList.vue";
 import {useTaskStore} from "../../stores/taskStore.js";
 import {useModalStore} from "../../stores/modalStore.js";
+import {useRoleStore} from "../../stores/roleStore.js";
 
 const tasklistStore = useTasklistStore()
+const roleStore = useRoleStore()
 const modalStore = useModalStore()
 const taskStore = useTaskStore()
 const dataLoaded = ref(false)
@@ -42,7 +44,7 @@ const redactTasklist = (tasklistId) => {
         v-for="tasklist in tasklistStore.tasklists"
         :header="tasklist.name"
         :tasks="taskStore.tasksByList(tasklist.id)"
-        :changeable="true"
+        :changeable="roleStore.can('tasklist.update')"
         @redact-tasklist="redactTasklist(tasklist.id)"
     />
   </div>
