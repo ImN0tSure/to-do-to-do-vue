@@ -1,6 +1,6 @@
 <script setup>
 import {useTaskStore} from "../stores/taskStore.js";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted} from "vue";
 import {useRoute} from 'vue-router'
 import {useProjectStore} from "../stores/projectStore.js";
 import {useTasklistStore} from "../stores/tasklistStore.js";
@@ -12,6 +12,7 @@ import EditableTextarea from "../components/structure/EditableTextarea.vue";
 import BaseButton from "../components/structure/BaseButton.vue";
 import {useRoleStore} from "../stores/roleStore.js";
 import {useAuthStore} from "../stores/authStore.js";
+import router from "../router/index.js";
 
 const route = useRoute()
 const projectStore = useProjectStore()
@@ -69,6 +70,15 @@ const inProgressOptions = taskStore.inProgress
 
 const saveTask = () => {
   taskStore.saveCurrentTask()
+}
+
+const deleteTask = async (taskId) => {
+  const response = await taskStore.deleteTask(taskId)
+  const projectUrl = route.params.url
+
+  if(response) {
+    router.push(`/cabinet/project/${projectUrl}`)
+  }
 }
 
 onMounted(async () => {
@@ -145,12 +155,22 @@ onMounted(async () => {
         :with-nullable=false
         :is-editable="roleStore.can('task.update') || roleStore.can('task.update.status')"
     />
-    <BaseButton
-        size="m"
-        text="Сохранить"
-        @click.prevent.stop="saveTask"
-        class="date-time"
-    />
+    <div class="button-wrapper">
+      <BaseButton
+          size="m"
+          text="Сохранить"
+          @click.prevent.stop="saveTask"
+          class="date-time"
+      />
+      <BaseButton
+          v-if="roleStore.can('task.delete')"
+          size="m"
+          text="Удалить"
+          class="delete-button"
+          @click.prevent.stop="deleteTask(taskStore.currentTask.id)"
+      />
+    </div>
+
   </div>
   <div v-else-if="taskStore.status === 'error'">
     Ошибка загрузки. Смотрите консоль.
@@ -169,5 +189,19 @@ onMounted(async () => {
 
 .date-time {
   width: 20%;
+}
+
+.delete-button {
+  background-color: #d13737;
+
+  &:hover {
+    background-color: #b83232;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>

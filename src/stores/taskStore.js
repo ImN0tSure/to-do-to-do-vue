@@ -109,6 +109,27 @@ export const useTaskStore = defineStore('taskStore', {
             this.tasks = []
             this.status = 'idle'
             this.currentTask = []
+        },
+        async deleteTask(taskId) {
+            this.status = 'loading'
+
+            try {
+                const targetUrl = `/api/project/${this.currentProject}/tasks/${taskId}`
+                const response = await axios.delete(targetUrl)
+
+                if (response.data.success) {
+                    this.currentTask = []
+                    this.tasks = this.tasks.filter(task => task.id !== taskId)
+                    return true
+                } else {
+                    this.status = 'success'
+                    console.log(response.data)
+                    return false
+                }
+            } catch (e) {
+                this.status = 'error'
+                console.log(e.response?.data?.message)
+            }
         }
     },
     getters: {
