@@ -50,13 +50,18 @@ export const useNotificationStore = defineStore('notificationStore', {
             }
         },
         async respondToInvitation(notificationId, notifiableId, isAccepted) {
-            const accept = isAccepted ? 'accept' : 'decline'
             const backup = [...this.notifications]
             this.notifications = this.notifications.filter(notification => notification.id !== notificationId)
 
             try {
-                const targetUrl = `/api/invitation/${accept}`
-                const response = await axios.put(targetUrl, {notifiable_id: notifiableId})
+                const targetUrl = `/api/invitation/response`
+                const response = await axios.put(
+                    targetUrl,
+                    {
+                        notifiable_id: notifiableId,
+                        is_accepted: isAccepted
+                    }
+                )
 
                 if (response.data.success) {
                     console.log(response.data)

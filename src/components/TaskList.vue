@@ -37,6 +37,22 @@ const listArrow = computed(() => {
   return listOpened.value ? '▲' : '▼'
 })
 
+const sortDirection = ref('asc')
+const sortField = ref('end_date')
+
+const sortedTasks = computed(() => {
+  return [...props.tasks].sort((a, b) => {
+    return sortDirection.value === 'asc'
+        ? String(a[sortField.value]).localeCompare(b[sortField.value])
+        : String(b[sortField.value]).localeCompare(a[sortField.value])
+  })
+})
+
+const sortTasks = (field, direction) => {
+  sortField.value = field
+  sortDirection.value = direction
+}
+
 </script>
 
 <template>
@@ -46,7 +62,8 @@ const listArrow = computed(() => {
           class="edit-button"
           v-if="props.changeable === true"
           @click="$emit('redactTasklist')"
-      >Редактировать</div>
+      >Редактировать
+      </div>
       <h2>{{ header }}</h2>
       <span
           class="toggle-arrow"
@@ -54,9 +71,11 @@ const listArrow = computed(() => {
       >{{ listArrow }}</span>
     </div>
     <div class="tasks" v-show="listOpened">
-      <TaskListRowHeader/>
+      <TaskListRowHeader
+        @sort-list="sortTasks"
+      />
       <TaskListRow
-          v-for="task in tasks"
+          v-for="task in sortedTasks"
           :name="task.name"
           :in-progress="!!task.inProgress"
           :priority="task.priority"
