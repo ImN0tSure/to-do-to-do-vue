@@ -8,8 +8,10 @@ import {useRoute} from 'vue-router'
 import router from "../router/index.js";
 import {useModalStore} from "../stores/modalStore.js";
 import {useRoleStore} from "../stores/roleStore.js";
+import {useTasklistStore} from "../stores/tasklistStore.js";
 
 const projectStore = useProjectStore()
+const tasklistStore = useTasklistStore()
 const roleStore = useRoleStore()
 const modalStore = useModalStore()
 const currentTab = ref('tasks')
@@ -26,17 +28,6 @@ const toCreateTaskPage = () => {
 const addNewTasklist = () => {
   modalStore.open('addTasklist')
 }
-
-// watch(() => projectStore.currentProject,
-//     async (newProject, oldProject) => {
-//       roleStore.unset()
-//
-//       if (newProject) {
-//         await projectStore.getProjectRole()
-//       }
-//     },
-//     {immediate: true}
-// )
 
 </script>
 
@@ -66,6 +57,7 @@ const addNewTasklist = () => {
           @click="addNewTasklist()"
       />
       <BaseButton
+          v-if="tasklistStore.tasklists.length > 0"
           text="Добавить задачу"
           @click="toCreateTaskPage"
       />

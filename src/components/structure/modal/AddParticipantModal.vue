@@ -1,10 +1,8 @@
 <script setup>
 import {useModalStore} from "../../../stores/modalStore.js";
 import BaseModal from "./BaseModal.vue";
-import {computed, ref} from "vue";
-import {useTasklistStore} from "../../../stores/tasklistStore.js";
+import {ref} from "vue";
 import BaseInput from "../BaseInput.vue";
-import BaseTextarea from "../BaseTextarea.vue";
 import BaseButton from "../BaseButton.vue";
 import VueSpinner from "../VueSpinner.vue";
 import {useParticipantStore} from "../../../stores/participantStore.js";
@@ -22,7 +20,7 @@ const close = () => {
 const addParticipant = async () => {
   const result = await participantStore.addParticipant(newParticipantEmail.value)
 
-  if(result) {
+  if (result) {
     close()
   }
 }
